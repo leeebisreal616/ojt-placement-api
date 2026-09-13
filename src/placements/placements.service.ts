@@ -72,4 +72,11 @@ export class PlacementsService {
     const placement = await this.findOne(id);
     await this.placementsRepository.remove(placement);
   }
+
+  findByStudent(studentId: number): Promise<Placement[]> {
+  return this.placementsRepository.find({
+    where: { studentId },
+    relations: { student: true },
+  });
+}
 }

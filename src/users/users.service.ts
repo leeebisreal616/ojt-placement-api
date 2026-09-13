@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
@@ -25,9 +25,13 @@ export class UsersService {
     return this.usersRepository.find();
   }
 
-  findOne(id: number): Promise<User | null> {
-    return this.usersRepository.findOneBy({ id });
+  async findOne(id: number): Promise<User> {
+  const user = await this.usersRepository.findOneBy({ id });
+  if (!user) {
+    throw new NotFoundException('User not found');
   }
+  return user;
+}
 
   findByEmail(email: string): Promise<User | null> {
     return this.usersRepository.findOneBy({ email });
@@ -36,4 +40,15 @@ export class UsersService {
   async remove(id: number): Promise<void> {
     await this.usersRepository.delete(id);
   }
+
+  async update(id: number, dto: Partial<{ email: string; password: string; fullName: string; role: string }>): Promise<User> {
+  const user = await this.usersRepository.findOneBy({ id });
+  if (!user) {
+    throw new NotFoundException('User not found');
+  }
+  Object.assign(user, dto);
+  return this.usersRepository.save(user);
+}
+
+
 }
