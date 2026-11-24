@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 13, 2026 at 01:25 PM
+-- Generation Time: Nov 24, 2026 at 09:22 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -35,6 +35,13 @@ CREATE TABLE `logbook_entries` (
   `hoursRendered` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `logbook_entries`
+--
+
+INSERT INTO `logbook_entries` (`id`, `placementId`, `entryDate`, `taskDescription`, `hoursRendered`) VALUES
+(1, 1, '2026-11-24', 'Fixed backend bugs and tested API endpoints', 8);
+
 -- --------------------------------------------------------
 
 --
@@ -48,16 +55,16 @@ CREATE TABLE `placements` (
   `position` varchar(255) NOT NULL,
   `status` varchar(255) NOT NULL DEFAULT 'pending',
   `startDate` date NOT NULL,
-  `endDate` date DEFAULT NULL
+  `endDate` date DEFAULT NULL,
+  `requiredHours` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `placements`
 --
 
-INSERT INTO `placements` (`id`, `studentId`, `companyName`, `position`, `status`, `startDate`, `endDate`) VALUES
-(1, 4, 'Acme Corp', 'IT Intern', 'approved', '2026-09-01', NULL),
-(2, 4, 'Acme Corp', 'IT Intern', 'pending', '2026-09-01', NULL);
+INSERT INTO `placements` (`id`, `studentId`, `companyName`, `position`, `status`, `startDate`, `endDate`, `requiredHours`) VALUES
+(1, 1, 'Test Company Inc.', 'IT Intern', 'approved', '2026-11-24', '2027-02-24', NULL);
 
 -- --------------------------------------------------------
 
@@ -70,17 +77,17 @@ CREATE TABLE `users` (
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `role` varchar(255) NOT NULL DEFAULT 'student',
-  `fullName` varchar(255) NOT NULL
+  `fullName` varchar(255) NOT NULL,
+  `phoneNumber` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `email`, `password`, `role`, `fullName`) VALUES
-(3, 'coordinator@cvsu.edu.ph', '$2b$10$i/GEhLb6G4lQFgT54/1mbusT7Qd53z8/tyyMYQnF9SUQnMI/sk1/y', 'coordinator', 'Jervin Quicho'),
-(4, 'student@cvsu.edu.ph', '$2b$10$XZErRf7LYTtKwpl63S3Wr.VZ0Le17ITi.3f2MnXg6tKANHe/pSSZS', 'student', 'Updated Name'),
-(5, 'newuser@cvsu.edu.ph', '$2b$10$otW9.Rh0CebNjGDdx.j8SOHO/wQPyDUH1B5hZvPHWRBhWL/Pz38Vm', 'student', 'New Test User');
+INSERT INTO `users` (`id`, `email`, `password`, `role`, `fullName`, `phoneNumber`) VALUES
+(1, 'student.test@cvsu.edu.ph', '$2b$10$jTr6MB1xOv91iyezQj27seR2OltT4puyJovr9s/0kCCtZtF09xJTi', 'student', 'Test Student', '09123456789'),
+(2, 'coordinator.test@cvsu.edu.ph', '$2b$10$phdwsK40t9siP0fXGHBHceqOmnKB9Uiiy1jQt.afWIOVPZ3vbEa.y', 'coordinator', 'Test Coordinator', '09000000000');
 
 --
 -- Indexes for dumped tables
@@ -115,19 +122,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `logbook_entries`
 --
 ALTER TABLE `logbook_entries`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `placements`
 --
 ALTER TABLE `placements`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
