@@ -1,0 +1,13 @@
+$kind: http-request
+url: "{{baseUrl}}/placements"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: '{"studentId":1,"companyName":"Test Company Inc.","position":"IT Intern","startDate":"2026-11-24","endDate":"2027-02-24"}'
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+order: 1000

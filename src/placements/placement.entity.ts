@@ -27,4 +27,7 @@ export class Placement {
 
   @Column({ type: 'date', nullable: true })
   endDate: string;
+
+  @Column({ type: 'int', nullable: true })
+  requiredHours: number;
 }

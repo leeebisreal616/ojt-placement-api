@@ -3,19 +3,30 @@ import { AuthGuard } from '@nestjs/passport';
 import { PlacementsService } from './placements.service';
 import { CreatePlacementDto } from './dto/create-placement.dto';
 import { UpdatePlacementDto } from './dto/update-placement.dto';
-  
+
 @Controller('placements')
 export class PlacementsController {
   constructor(private readonly placementsService: PlacementsService) {}
 
   @Post()
   create(@Body() dto: CreatePlacementDto) {
-    return this.placementsService.create(dto);
+    return this.placementsService.create(dto, dto.studentId);
   }
 
   @Get()
   findAll() {
     return this.placementsService.findAll();
+  }
+
+  @Get('student/:studentId')
+  findByStudent(@Param('studentId') studentId: string) {
+    return this.placementsService.findByStudent(+studentId);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('my/placements')
+  findMyPlacements(@Request() req: any) {
+    return this.placementsService.findByStudent(req.user.userId);
   }
 
   @Get(':id')
@@ -34,15 +45,4 @@ export class PlacementsController {
   remove(@Param('id') id: string) {
     return this.placementsService.remove(+id);
   }
-
-  @Get('student/:studentId')
-findByStudent(@Param('studentId') studentId: string) {
-  return this.placementsService.findByStudent(+studentId);
-}
-
-@UseGuards(AuthGuard('jwt'))
-@Get('my/placements')
-findMyPlacements(@Request() req: any) {
-  return this.placementsService.findByStudent(req.user.userId);
-}
 }

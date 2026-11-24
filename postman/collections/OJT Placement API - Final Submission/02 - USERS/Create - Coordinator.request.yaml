@@ -1,0 +1,9 @@
+$kind: http-request
+url: "{{baseUrl}}/users"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: '{"email":"coordinator.test@cvsu.edu.ph","password":"coord1234","fullName":"Test Coordinator","role":"coordinator","phoneNumber":"09000000000"}'
+order: 2000

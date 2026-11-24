@@ -1,0 +1,13 @@
+$kind: http-request
+url: "{{baseUrl}}/placements/{{placementId}}"
+method: PATCH
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: '{"status":"approved"}'
+auth:
+  type: bearer
+  credentials:
+    token: "{{coordToken}}"
+order: 1000

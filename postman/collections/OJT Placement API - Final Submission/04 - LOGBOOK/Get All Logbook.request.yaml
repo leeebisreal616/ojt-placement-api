@@ -1,0 +1,8 @@
+$kind: http-request
+url: "{{baseUrl}}/logbook"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+order: 2000

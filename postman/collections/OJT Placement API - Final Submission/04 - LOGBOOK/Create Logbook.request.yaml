@@ -1,0 +1,13 @@
+$kind: http-request
+url: "{{baseUrl}}/logbook"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: '{"placementId":1,"entryDate":"2026-11-24","taskDescription":"Fixed backend bugs and tested API endpoints","hoursRendered":8}'
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+order: 1000

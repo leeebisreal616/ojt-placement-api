@@ -1,0 +1,13 @@
+$kind: http-request
+url: "{{baseUrl}}/auth/login"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: '{"email":"student.test@cvsu.edu.ph","password":"test1234"}'
+scripts:
+  - type: afterResponse
+    code: if(pm.response.code===201||pm.response.code===200){const j=pm.response.json();if(j.access_token){pm.collectionVariables.set('token',j.access_token);}}
+    language: text/javascript
+order: 1000

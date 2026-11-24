@@ -1,6 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { Placement } from './placement.entity';
 import { CreatePlacementDto } from './dto/create-placement.dto';
 import { UpdatePlacementDto } from './dto/update-placement.dto';
@@ -12,55 +12,73 @@ export class PlacementsService {
     private placementsRepository: Repository<Placement>,
   ) {}
 
-  create(dto: CreatePlacementDto): Promise<Placement> {
-    const placement = this.placementsRepository.create(dto);
+  async create(createPlacementDto: CreatePlacementDto, studentId: number) {
+    const existingActive = await this.placementsRepository.findOne({
+      where: {
+        studentId,
+        status: In(['pending', 'approved']),
+      },
+    });
+
+    if (existingActive) {
+      throw new ConflictException(
+        'You already have an active placement application. Complete or cancel it before applying to a new one.',
+      );
+    }
+
+    const placement = this.placementsRepository.create({
+      ...createPlacementDto,
+      studentId,
+    });
+
     return this.placementsRepository.save(placement);
   }
 
   findAll(): Promise<Placement[]> {
-  return this.placementsRepository.find({
-    relations: { student: true },
-    select: {
-      id: true,
-      studentId: true,
-      companyName: true,
-      position: true,
-      status: true,
-      startDate: true,
-      endDate: true,
-      student: {
+    return this.placementsRepository.find({
+      relations: { student: true },
+      select: {
         id: true,
-        email: true,
-        fullName: true,
-        role: true,
+        studentId: true,
+        companyName: true,
+        position: true,
+        status: true,
+        startDate: true,
+        endDate: true,
+        student: {
+          id: true,
+          email: true,
+          fullName: true,
+          role: true,
+        },
       },
-    },
-  });
-}
+    });
+  }
 
   async findOne(id: number): Promise<Placement> {
-  const placement = await this.placementsRepository.findOne({
-    where: { id },
-    relations: { student: true },
-    select: {
-      id: true,
-      studentId: true,
-      companyName: true,
-      position: true,
-      status: true,
-      startDate: true,
-      endDate: true,
-      student: {
+    const placement = await this.placementsRepository.findOne({
+      where: { id },
+      relations: { student: true },
+      select: {
         id: true,
-        email: true,
-        fullName: true,
-        role: true,
+        studentId: true,
+        companyName: true,
+        position: true,
+        status: true,
+        startDate: true,
+        endDate: true,
+        student: {
+          id: true,
+          email: true,
+          fullName: true,
+          role: true,
+        },
       },
-    },
-  });
-  if (!placement) throw new NotFoundException('Placement not found');
-  return placement;
-}
+    });
+
+    if (!placement) throw new NotFoundException('Placement not found');
+    return placement;
+  }
 
   async update(id: number, dto: UpdatePlacementDto): Promise<Placement> {
     const placement = await this.findOne(id);
@@ -74,9 +92,24 @@ export class PlacementsService {
   }
 
   findByStudent(studentId: number): Promise<Placement[]> {
-  return this.placementsRepository.find({
-    where: { studentId },
-    relations: { student: true },
-  });
-}
+    return this.placementsRepository.find({
+      where: { studentId },
+      relations: { student: true },
+      select: {
+        id: true,
+        studentId: true,
+        companyName: true,
+        position: true,
+        status: true,
+        startDate: true,
+        endDate: true,
+        student: {
+          id: true,
+          email: true,
+          fullName: true,
+          role: true,
+        },
+      },
+    });
+  }
 }

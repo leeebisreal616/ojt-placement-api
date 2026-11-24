@@ -18,14 +18,14 @@ export class LogbookController {
     return this.logbookService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.logbookService.findOne(+id);
-  }
-
   @Get('placement/:placementId')
   findByPlacement(@Param('placementId') placementId: string) {
     return this.logbookService.findByPlacement(+placementId);
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.logbookService.findOne(+id);
   }
 
   @UseGuards(AuthGuard('jwt'))
